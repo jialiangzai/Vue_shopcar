@@ -1,28 +1,56 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Head title="购物车" color="#fff" bg="orange" />
+    <!-- <Head title="购物车2" color="red" bg="black" /> -->
+    <Good  v-for="item in list" :key="item.id" :goodsObject="item" />
+    <Foot :list="list"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Head from "./views/head.vue";
+import Good from "./views/good.vue";
+import Foot from "./views/foot.vue";
+
+import axios from 'axios'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+    created () {
+    this.getList();
+  },
+data() {
+  return {
+    list: []
   }
-}
+},
+  methods: {
+    async getList (){
+      const {data:{list}} = await axios({
+        url:'/api/cart'
+      })
+      console.log(list);
+      this.list=list
+    }
+    //    async getList (){
+    //   const {data} = await axios({
+    //     url:'/api/cart'
+    //   })
+    //   console.log(data);
+    //   // this.list=list
+    // }
+  },
+  components: {
+    name: 'App',
+    Head,
+    Good,
+    Foot,
+  },
+};
 </script>
 
-<style>
+<style lang="css">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  /* 避开遮盖 */
+  padding: 45px 0 50px 0;
 }
 </style>
